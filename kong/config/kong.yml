@@ -1,0 +1,51 @@
+_format_version: "3.0"
+
+# Services
+services:
+  - name: order-ms
+    host: order-ms #Upstream host
+    routes:
+      - name: orders
+        paths:
+          - /orders
+        strip_path: false 
+  - name: inventory-ms
+    host: inventory-ms #Upstream host
+    routes:
+      - name: products
+        paths:
+          - /products
+        strip_path: false 
+  - name: payment-ms
+    host: payment-ms #Upstream host
+    routes:
+      - name: payments
+        paths:
+          - /payments
+        strip_path: false                 
+
+
+# Upstreams
+upstreams:
+  - name: order-ms
+    targets:
+    - target: order-ms:8000
+  - name: inventory-ms
+    targets:
+    - target: inventory-ms:8000
+  - name: payment-ms
+    targets:
+    - target: payment-ms:8000        
+
+consumers:
+  - username: ayush
+    keyauth_credentials:
+    - key: myKey123
+    tags:
+    - rootUser
+
+plugins:
+    - name: key-auth
+      config:
+        key_names:
+        - apikey
