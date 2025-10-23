@@ -1,0 +1,352 @@
+{
+	"info": {
+		"_postman_id": "2375f288-c1ae-4faa-90f9-ed9042bd3f84",
+		"name": "microservice-project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15334168"
+	},
+	"item": [
+		{
+			"name": "debzium-mongo-connector",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "apikey",
+						"value": "myKey123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "// Order \r\n/*{\r\n  \"name\": \"order-event-connector\",\r\n  \"config\": {\r\n    \"connector.class\": \"io.debezium.connector.mongodb.MongoDbConnector\",\r\n    \"mongodb.connection.string\": \"mongodb://mongo:27017/?replicaSet=rs0\",\r\n    \"topic.prefix\": \"mongo\",                       // prefix for Kafka topics \r\n    \"collection.include.list\": \"order.outbox\",     // optional: limit to a collection \r\n    \"snapshot.mode\": \"initial\",                    // default: initial snapshot \r\n    \"tasks.max\": \"1\"\r\n  }\r\n}*/\r\n\r\n//inventory\r\n/*{\r\n  \"name\": \"inventory-event-connector\",\r\n  \"config\": {\r\n    \"connector.class\": \"io.debezium.connector.mongodb.MongoDbConnector\",\r\n    \"mongodb.connection.string\": \"mongodb://mongo:27017/?replicaSet=rs0\",\r\n    \"topic.prefix\": \"mongo\",                       // prefix for Kafka topics \r\n    \"collection.include.list\": \"inventory.outbox\",     // optional: limit to a collection \r\n    \"snapshot.mode\": \"initial\",                    // default: initial snapshot \r\n    \"tasks.max\": \"1\"\r\n  }\r\n}*/\r\n\r\n//payment\r\n{\r\n  \"name\": \"payment-event-connector\",\r\n  \"config\": {\r\n    \"connector.class\": \"io.debezium.connector.mongodb.MongoDbConnector\",\r\n    \"mongodb.connection.string\": \"mongodb://mongo:27017/?replicaSet=rs0\",\r\n    \"topic.prefix\": \"mongo\",                       // prefix for Kafka topics \r\n    \"collection.include.list\": \"payment.outbox\",     // optional: limit to a collection \r\n    \"snapshot.mode\": \"initial\",                    // default: initial snapshot \r\n    \"tasks.max\": \"1\"\r\n  }\r\n}\r\n\r\n/*\r\ndata of collectionn send to kafka topic\r\ninventory.products (COLLECTION) -------> mongo.inventory.products (KAFKA TOPIC)\r\n*/",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "debzium-get-all-connectors",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "apikey",
+						"value": "myKey123",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8083/connectors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "debzium-delete-connector",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "apikey",
+						"value": "myKey123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors/mongo-test-connector",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						"mongo-test-connector"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "apikey",
+						"value": "myKey123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"name\": \"headphone\",\r\n            \"qty\": 20,\r\n            \"price\": 5000,\r\n            \"product_id\": \"product-d4ad0d\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/orders/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"orders",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Order",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "apikey",
+						"value": "myKey123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"headphone\",\r\n    \"qty\": 100,\r\n    \"price\": 5000.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/orders/order-0a7d41",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"orders",
+						"order-0a7d41"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PLP",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "apikey",
+						"value": "myKey123",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/products/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make Payment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "apikey",
+						"value": "myKey123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"order_id\": \"order-0a7d41\",\r\n    \"payment_status\": \"DONE\"\r\n    //\"payment_status\": \"FAILED\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/payments/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"payments",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Products",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "apikey",
+						"value": "myKey123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"watch\",\r\n  \"qty\": 10,\r\n  \"price\": 50\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Return Order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "apikey",
+						"value": "myKey123",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/orders/return/order-0a7d41",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"orders",
+						"return",
+						"order-0a7d41"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Payment",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "apikey",
+						"value": "myKey123",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/payments/payment-a31512",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"payments",
+						"payment-a31512"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PDP",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "apikey",
+						"value": "myKey123",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/products/product-d4ad0d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"product-d4ad0d"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
