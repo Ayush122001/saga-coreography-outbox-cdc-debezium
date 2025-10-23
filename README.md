@@ -11,7 +11,7 @@ This repository demonstrates a complete **event-driven microservices architectur
 
 It’s designed to give a *real working example* of distributed data consistency, failure handling, and event-driven design , not just theory.
 
-[![Postman Collection](https://img.shields.io/badge/Postman-Collection-orange)](./microservice-project.postman_collection.json)
+## All API endpoints are included in the Postman collection. You can access it [![Postman Collection](https://img.shields.io/badge/Postman-Collection-orange)](./microservice-project.postman_collection.json)
 
 ---
 
